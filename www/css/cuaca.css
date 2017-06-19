@@ -1,0 +1,160 @@
+#cuacahariini , #cuacabesok {
+    background: url('../gambar/bgcuaca.png') no-repeat;
+    background-attachment:scroll;
+    background-position:center;
+    background-size:cover;
+    text-align: center;
+}
+
+@font-face {
+    font-family: 'weather';
+    src: url('artill_clean_icons.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#weather {
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: -30px;
+}
+
+#weather i {
+    color: #fff;
+    font-family: weather;
+    font-size: 150px;
+    font-weight: normal;
+    font-style: normal;
+    text-transform: none;
+}
+
+.icon-0:before { content: ":"; }
+.icon-1:before { content: "p"; }
+.icon-2:before { content: "S"; }
+.icon-3:before { content: "Q"; }
+.icon-4:before { content: "S"; }
+.icon-5:before { content: "W"; }
+.icon-6:before { content: "W"; }
+.icon-7:before { content: "W"; }
+.icon-8:before { content: "W"; }
+.icon-9:before { content: "I"; }
+.icon-10:before { content: "W"; }
+.icon-11:before { content: "I"; }
+.icon-12:before { content: "I"; }
+.icon-13:before { content: "I"; }
+.icon-14:before { content: "I"; }
+.icon-15:before { content: "W"; }
+.icon-16:before { content: "I"; }
+.icon-17:before { content: "W"; }
+.icon-18:before { content: "U"; }
+.icon-19:before { content: "Z"; }
+.icon-20:before { content: "Z"; }
+.icon-21:before { content: "Z"; }
+.icon-22:before { content: "Z"; }
+.icon-23:before { content: "Z"; }
+.icon-24:before { content: "E"; }
+.icon-25:before { content: "E"; }
+.icon-26:before { content: "3"; }
+.icon-27:before { content: "a"; }
+.icon-28:before { content: "A"; }
+.icon-29:before { content: "a"; }
+.icon-30:before { content: "A"; }
+.icon-31:before { content: "6"; }
+.icon-32:before { content: "1"; }
+.icon-33:before { content: "6"; }
+.icon-34:before { content: "1"; }
+.icon-35:before { content: "W"; }
+.icon-36:before { content: "1"; }
+.icon-37:before { content: "S"; }
+.icon-38:before { content: "S"; }
+.icon-39:before { content: "S"; }
+.icon-40:before { content: "M"; }
+.icon-41:before { content: "W"; }
+.icon-42:before { content: "I"; }
+.icon-43:before { content: "W"; }
+.icon-44:before { content: "a"; }
+.icon-45:before { content: "S"; }
+.icon-46:before { content: "U"; }
+.icon-47:before { content: "S"; }
+
+#weather h2 {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 100px;
+    font-weight: 300;
+    text-align: center;
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+#weather ul {
+    margin: 0;
+    padding: 0;
+}
+
+#weather li {
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 10px;
+    display: inline-table;
+    border-radius: 5px;
+    margin: 5px;
+    list-style: none;
+}
+
+#footer{
+    background-color: transparent;
+}
+
+#btforecast , #btkembalikeatas{
+    width: auto;
+    background-color: transparent;
+    color: white;
+    border-color: transparent;
+}
+
+#forecast{
+    text-align: left;
+    margin-top: 80px;
+}
+
+#forecast li{
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 3px;
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 15px;
+    list-style: none;
+}
+
+#loader , #loader2{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 100px;
+    height: 100px;
+    margin: 250px 0 0 -10px;
+    border: 5px solid #ffffff;
+    border-radius: 50%;
+    border-top: 5px solid #000000;
+    width: 30px;
+    height: 30px;
+    -webkit-animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#konten , #konten2{
+    display: none;
+}

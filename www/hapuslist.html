@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <!--
+  * Please see the included README.md file for license terms and conditions.
+  -->
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+        <meta charset="UTF-8">
+        <title>Info Cuaca</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+        <!--
+  * The "meta viewport" tag (below) helps your app size appropriately to a device's ideal viewport.
+  * Note that Windows device viewports work better when initialized using the @viewport CSS rule.
+  * For a quick overview of "meta viewport" and @viewport, see this article:
+  *   http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag
+  * To see how it works, try your app on a real device with and without a "meta viewport" tag.
+  * Additional useful references include:
+  *   http://www.quirksmode.org/mobile/viewports.html
+  *   http://www.quirksmode.org/mobile/metaviewport/devices.html
+  *   https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
+-->
+
+        <!-- <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1"> -->
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, minimum-scale=1, maximum-scale=2"> -->
+
+        <style>
+            /* following three (cascaded) are equivalent to above three meta viewport statements */
+            /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html */
+            /* see http://dev.w3.org/csswg/css-device-adapt/ */
+                @-ms-viewport { width: 100vw ; min-zoom: 100% ; zoom: 100% ; }          @viewport { width: 100vw ; min-zoom: 100% zoom: 100% ; }
+                @-ms-viewport { user-zoom: fixed ; min-zoom: 100% ; }                   @viewport { user-zoom: fixed ; min-zoom: 100% ; }
+                /*@-ms-viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }   @viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }*/
+        </style>
+
+        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" type="text/css" href="css/index_main.less.css" class="main-less">
+
+        <!-- IMPORTANT: Do not include a weinre script tag as part of your release builds! -->
+        <!-- Place your remote debugging (weinre) script URL from the Test tab here, if it does not work below -->
+        <!-- <script src="http://debug-software.intel.com/target/target-script-min.js#insertabiglongfunkynumberfromthexdkstesttab"></script> -->
+
+        <!-- Recommended location for your JavaScript libraries -->
+        <!-- These library references (below) are just examples to give you the general idea... -->
+        <!-- <script src="lib/mc/hammer.js"></script> -->
+        <!-- <script src="lib/ft/fastclick.js"></script> -->
+
+        <!--
+  * cordova.js is a phantom lib for "Cordova HTML5 web app," it does nothing in a "Standard HTML5 web app"
+  * Seeing a "Failed to load resource: net::ERR_FILE_NOT_FOUND" message caused by this "cordova.js" script?
+  * The cordova.js script is required if you convert your "Standard HTML5" project into a "Cordova" project.
+  * You can safely ignore the error or comment out this line if you will not be developing a Cordova app.
+-->
+        <script src="cordova.js" id="xdkJScordova_"></script>
+
+        <script src="js/app.js"></script>
+        <!-- for your event code, see README and file comments for details -->
+        <script src="js/init-app.js"></script>
+        <!-- for your init code, see README and file comments for details -->
+        <script src="xdk/init-dev.js"></script>
+        <!-- normalizes device and document ready events, see file for details -->
+        <script type="application/javascript" src="lib/jquery.min.js"></script>
+        <script type="application/javascript" src="marginal/marginal-position.min.js"></script>
+        
+        <script type="application/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+
+        <!-- custom css -->
+        <link rel="stylesheet" type="text/css" href="css/global.css">
+        <link rel="stylesheet" type="text/css" href="css/cuaca.css">
+        <!-- animasi css -->
+        <link rel="stylesheet" type="text/css" href="css/animate.css">
+
+        <script type="text/javascript">
+            var IDUser;
+            
+            /* untuk menampilkan daftar kota yang tersimpan */
+            $(document).ready(function(){
+                showLoader();
+                IDUser = parse("IDUser");
+                
+                $.post("http://www.infocuaca.esy.es/data.php?IDUser="+IDUser,function(response){
+                    var arr = $.parseJSON(response); 
+                    var trHTML = '';
+                    
+                    $.each(arr, function(ix, nilai){
+                        trHTML += '<a id="itemlistkota" class="list-group-item allow-badge widget uib_w_8" data-uib="twitter%20bootstrap/list_item" data-ver="1" href="#" onclick="hapuskonfirm('+ arr[ix].id +')">' + arr[ix].nama + '</a>'
+                    });
+                    $('#listkota').append(trHTML);
+                    tutupLoader();
+                });
+            });
+            
+            /* untuk konfirmasi hapus */
+            function hapuskonfirm(hid){
+                var id = hid;
+                navigator.notification.confirm('Yakin Ingin Menghapus ?', onConfirm, 'Konfirmasi', ['Batal','Ya']);
+                
+                function onConfirm(buttonIndex) {
+                	showLoader();
+                    if(buttonIndex == 2){
+                        $.post("http://www.infocuaca.esy.es/hapus.php?ID="+id, function(data){
+                             if(data.status == "sukses"){
+                                 navigator.notification.alert('Item Yang Dipilih Berhasil Dihapus Dari List', berhasilHapusList, 'Hapus Berhasil', 'OK');
+                                 tutupLoader();
+                             }
+                             else if(data.status == 'gagal'){
+                                 navigator.notification.alert('Item Yang Dipilih Gagal Dihapus Dari List', null, 'Hapus Gagal', 'OK');
+                                 tutupLoader();
+                             }
+                        });
+                    }
+                }
+            }
+            
+            /* setelah berhasil hapus list maka halaman hapuslist akan direload */
+            function berhasilHapusList(){
+                window.location="hapuslist.html?IDUser=" + IDUser;
+            }
+
+            /* untuk kembali ke halaman sebelumnya */
+            function kembali(){
+                window.location="halamanutama.html?IDUser=" + IDUser;
+            }
+            
+            /* untuk menampilkan loader halaman */
+            function showLoader() {
+                document.getElementById("loader").style.marginTop = "-50px";
+                document.getElementById("mainpage").style.opacity = "0.5";
+            }
+            
+            /* untuk menutup loader */
+            function tutupLoader(){
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("mainpage").style.opacity = "1";
+            }
+            
+            /*fungsi untuk mengambil parameter dari link*/    
+            function parse(val) {
+                var result = "Not found",
+                tmp = [];
+                location.search
+                .substr(1)
+                .split("&")
+                .forEach(function (item) {
+                    tmp = item.split("=");
+                    if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+                });
+                return result;
+            }
+        </script>
+    </head>
+
+    <body>
+        <!-- IMPORTANT: Do not include a weinre script tag as part of your release builds! -->
+        <!-- Place your remote debugging (weinre) script URL from the Test tab here, if it does not work above -->
+        <!-- <script src="http://debug-software.intel.com/target/target-script-min.js#insertabiglongfunkynumberfromthexdkstesttab"></script> -->
+        
+        <!-- bagian loader -->
+        <div id="loader"></div>
+        
+        <div class="upage" id="mainpage">
+            <div class="upage-outer">
+                <!-- bagian header -->
+                <div id="myheader" class="uib-header header-bg container-group inner-element uib_w_8 uib-header-fixed" data-uib="layout/header" data-ver="0">
+                    <h2>Hapus List</h2>
+                    <div class="widget-container wrapping-col single-centered"></div>
+                    <div class="widget-container content-area horiz-area wrapping-col left">
+                        <!-- tombol untuk kembali ke halaman sebelumnya-->
+                        <button class="btn widget uib_w_9 d-margins btn-lg btn-default" data-uib="twitter%20bootstrap/button" data-ver="1" id="btBack" onclick="kembali()"><i class="glyphicon glyphicon-arrow-left" data-position="icon only"></i>
+                        </button>
+                    </div>
+                    <div class="widget-container content-area horiz-area wrapping-col right"></div>
+                </div>
+
+                <!-- bagian konten -->
+                <div class="upage-content ac0 content-area vertical-col left animated fadeInUp" id="page_94_71">
+
+                    <!-- list daftar kota -->
+                    <div class="list-group widget uib_w_6 d-margins" data-uib="twitter%20bootstrap/list_group" data-ver="1" id="listkota">
+                        <a class="list-group-item allow-badge widget uib_w_7" data-uib="twitter%20bootstrap/list_item" data-ver="1">
+                            <h4 class="list-group-item-heading">Klik Nama Lokasi Yang Ingin Dihapus</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </body>
+
+</html>

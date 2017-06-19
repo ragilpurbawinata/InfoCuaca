@@ -1,0 +1,60 @@
+#myheader{
+	background-color: white;
+	box-shadow: 0px 0px 5px black;
+    min-height: 60px;
+}
+#myheader h2{
+	color: black;
+}
+#itemlistkota{
+	background-color: rgba(255,255,255,0.7);
+	color: black;
+	font-size: 1.3em;
+}
+#itemlistkota:hover{
+	background-color: lightgrey;
+}
+#btGps{
+    margin-top: 10px;
+}
+#popku{
+    margin-top: 150px;
+}
+#daftarkonten{
+	display: none;
+}
+#loginkonten , #daftarkonten{
+    min-height: 100%;
+    padding-top: 10px;
+}
+#ketlogindandaftar{
+    margin-top: 50px;
+    margin-bottom: 0px;
+    text-align: center;
+    color: black;
+    font-style: italic;
+}
+#judulKonten{
+    font-size: 25px;
+    font-weight: bold;
+    color: royalblue;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+}
+#kontenabout{
+    margin: 20px;
+}
+#infoabout{
+    background-color: white;
+    border-radius: 10px;
+    text-align: justify;
+    padding: 15px;
+    color: black;
+    font-size: 18px;
+}
+#infopembuat{
+   text-align: center;
+   color: royalblue;
+   font-size: 12px;
+}

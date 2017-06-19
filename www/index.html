@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+    <!--
+  * Please see the included README.md file for license terms and conditions.
+  -->
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+        <meta charset="UTF-8">
+        <title>Info Cuaca</title>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+        <!--
+  * The "meta viewport" tag (below) helps your app size appropriately to a device's ideal viewport.
+  * Note that Windows device viewports work better when initialized using the @viewport CSS rule.
+  * For a quick overview of "meta viewport" and @viewport, see this article:
+  *   http://webdesign.tutsplus.com/tutorials/htmlcss-tutorials/quick-tip-dont-forget-the-viewport-meta-tag
+  * To see how it works, try your app on a real device with and without a "meta viewport" tag.
+  * Additional useful references include:
+  *   http://www.quirksmode.org/mobile/viewports.html
+  *   http://www.quirksmode.org/mobile/metaviewport/devices.html
+  *   https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
+-->
+
+        <!-- <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1"> -->
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes, minimum-scale=1, maximum-scale=2"> -->
+
+        <style>
+            /* following three (cascaded) are equivalent to above three meta viewport statements */
+            /* see http://www.quirksmode.org/blog/archives/2014/05/html5_dev_conf.html */
+            /* see http://dev.w3.org/csswg/css-device-adapt/ */
+                @-ms-viewport { width: 100vw ; min-zoom: 100% ; zoom: 100% ; }          @viewport { width: 100vw ; min-zoom: 100% zoom: 100% ; }
+                @-ms-viewport { user-zoom: fixed ; min-zoom: 100% ; }                   @viewport { user-zoom: fixed ; min-zoom: 100% ; }
+                /*@-ms-viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }   @viewport { user-zoom: zoom ; min-zoom: 100% ; max-zoom: 200% ; }*/
+        </style>
+
+        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" type="text/css" href="css/index_main.less.css" class="main-less">
+
+        <!-- IMPORTANT: Do not include a weinre script tag as part of your release builds! -->
+        <!-- Place your remote debugging (weinre) script URL from the Test tab here, if it does not work below -->
+        <!-- <script src="http://debug-software.intel.com/target/target-script-min.js#insertabiglongfunkynumberfromthexdkstesttab"></script> -->
+
+        <!-- Recommended location for your JavaScript libraries -->
+        <!-- These library references (below) are just examples to give you the general idea... -->
+        <!-- <script src="lib/mc/hammer.js"></script> -->
+        <!-- <script src="lib/ft/fastclick.js"></script> -->
+
+        <!--
+  * cordova.js is a phantom lib for "Cordova HTML5 web app," it does nothing in a "Standard HTML5 web app"
+  * Seeing a "Failed to load resource: net::ERR_FILE_NOT_FOUND" message caused by this "cordova.js" script?
+  * The cordova.js script is required if you convert your "Standard HTML5" project into a "Cordova" project.
+  * You can safely ignore the error or comment out this line if you will not be developing a Cordova app.
+-->
+        <script src="cordova.js" id="xdkJScordova_"></script>
+
+        <script src="js/app.js"></script>
+        <!-- for your event code, see README and file comments for details -->
+        <script src="js/init-app.js"></script>
+        <!-- for your init code, see README and file comments for details -->
+        <script src="xdk/init-dev.js"></script>
+        <!-- normalizes device and document ready events, see file for details -->
+        <script type="application/javascript" src="lib/jquery.min.js"></script>
+        <script type="application/javascript" src="marginal/marginal-position.min.js"></script>
+
+        <script type="application/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+        <script type="application/javascript" src="xdk/ad/bs_subpage.js"></script>
+
+        <!-- custom css -->
+        <link rel="stylesheet" type="text/css" href="css/global.css">
+        <link rel="stylesheet" type="text/css" href="css/cuaca.css">
+		<!-- animasi css -->
+        <link rel="stylesheet" type="text/css" href="css/animate.css">
+
+        <script type="text/javascript">
+            /* untuk proses login */
+            function login(){
+                var u = document.getElementById("user").value;
+                var p = document.getElementById("pass").value;
+                
+                if(u == "" || p == ""){
+                    navigator.notification.alert('Username dan Password Harus Diisi !',null,'Login Gagal','OK');
+                }
+                else{
+                    tampilLoader();
+                    
+                    $.post("http://www.infocuaca.esy.es/login.php?user=" + u + "&pass=" + p, function(response){
+                       var arr = $.parseJSON(response);
+                       
+                       $.each(arr, function(ix, nilai){
+                            var ID = arr[ix].id;
+                            var status = arr[ix].status;
+
+                            if(status == "sukses"){
+                                window.location = "halamanutama.html?IDUser=" + ID;
+                            }
+                            else if(status == 'gagal'){
+                                navigator.notification.alert('Username dan Password Salah !',null,'Login Gagal','OK');
+                                tutupLoader();
+                            }
+                       });
+                    });
+                }
+            }
+
+            /* untuk proses pendaftaran akun baru */
+            function newUser(){
+                var newu = document.getElementById("newuser").value;
+                var newp = document.getElementById("newpass").value;
+
+                if(newu == "" || newp == ""){
+                    navigator.notification.alert('Username dan Password Harus Diisi !',null,'Daftar Akun Gagal','OK');
+                }
+                else{
+                    tampilLoader();
+                    $.post("http://www.infocuaca.esy.es/daftar.php?newuser=" + newu + "&newpass=" + newp, function(data){
+                        if(data.status == "sukses"){
+                            navigator.notification.alert('Akun Berhasil Dibuat',berhasilDaftarAkun,'Daftar Akun Sukses','OK');
+                        }
+                        else if(data.status == 'gagal'){
+                            navigator.notification.alert('Gagal Buat Akun !',null,'Daftar Akun Gagal','OK');
+                            tutupLoader();
+                        }                     
+                    });
+                }
+            }
+            
+            /* setelah alert berhasil daftar akun muncul akan menuju ke halaman index.html */
+            function berhasilDaftarAkun(){
+                window.location='index.html';
+            }
+            
+            /* untuk menampilkan konten daftar */
+            function daftar(){
+                document.getElementById("loginkonten").style.display = "none";
+                document.getElementById("daftarkonten").style.display = "block";
+            }
+
+            /* untuk menampilkan konten login kembali */
+            function kembalikelogin(){
+                document.getElementById("loginkonten").style.display = "block";
+                document.getElementById("daftarkonten").style.display = "none";
+            }
+            
+            /* untuk menampilkan loader */
+            function tampilLoader(){
+                document.getElementById("loader").style.display = "block";
+                document.getElementById("loader").style.marginTop = "-50px";
+                document.getElementById("mainpage").style.opacity = "0.5";
+            }
+            
+            /* untuk menutup loader */
+            function tutupLoader(){
+                document.getElementById("loader").style.display = "none";
+                document.getElementById("mainpage").style.opacity = "1";
+            }
+        </script>
+    </head>
+
+    <body>
+        <!-- IMPORTANT: Do not include a weinre script tag as part of your release builds! -->
+        <!-- Place your remote debugging (weinre) script URL from the Test tab here, if it does not work above -->
+        <!-- <script src="http://debug-software.intel.com/target/target-script-min.js#insertabiglongfunkynumberfromthexdkstesttab"></script> -->
+        
+        <!-- bagian loader -->
+        <div id="loader" style="display:none"></div>
+        
+        <div class="upage" id="mainpage">
+            
+            <div class="upage-outer">
+                <!-- bagian header -->
+                <div id="myheader" class="uib-header header-bg container-group inner-element uib_w_1 uib-header-fixed" data-uib="layout/header" data-ver="0">
+                    <h2>Info Cuaca</h2>
+                    <div class="widget-container wrapping-col single-centered"></div>
+
+                    <!-- header bagian kiri -->
+                    <div class="widget-container content-area horiz-area wrapping-col left">
+
+                    </div>
+
+                    <!-- header bagian kanan -->
+                    <div class="widget-container content-area horiz-area wrapping-col right">
+
+                    </div>
+                </div>
+
+                <!-- bagian konten login -->
+                <div class="upage-content ac0 content-area vertical-col left animated fadeInDown" id="loginkonten">
+
+                    <!-- judul dari konten login -->
+                    <h2 id="judulKonten">Login Pengguna</h2>
+
+                    <!-- editText untuk memasukkan nama user -->
+                    <div class="table-thing widget uib_w_2 d-margins" data-uib="twitter%20bootstrap/input" data-ver="1">
+                        <label class="narrow-control" for="nkota"></label>
+                        <input class="wide-control form-control default input-lg" type="text" placeholder="Masukkan Username" id="user">
+                    </div>
+
+                    <!-- editText untuk memasukkan password -->
+                    <div class="table-thing widget uib_w_2 d-margins" data-uib="twitter%20bootstrap/input" data-ver="1">
+                        <label class="narrow-control" for="nkota"></label>
+                        <input class="wide-control form-control default input-lg" type="password" placeholder="Masukkan Password" id="pass">
+                    </div>
+
+                    <!-- tombol login -->
+                    <button class="btn widget uib_w_4 d-margins btn-lg btn-primary" data-uib="twitter%20bootstrap/button" data-ver="1" id="btLogin" onclick="login()">LOGIN</button>
+
+                    <!-- tombol daftar -->
+                    <p id="ketlogindandaftar">Belum Punya Akun ?
+                        <br>Klik Tombol Dibawah Ini
+                        <br>Untuk Buat Akun Baru</p>
+                    <button class="btn widget uib_w_7 d-margins btn-lg btn-link" data-uib="twitter%20bootstrap/button" data-ver="1" id="btDaftar" onclick="daftar()">Daftar</button>
+                </div>
+
+                <!-- bagian konten daftar -->
+                <div class="upage-content ac0 content-area vertical-col left animated fadeInRight" id="daftarkonten">
+
+                    <!-- judul dari konten daftar -->
+                    <h2 id="judulKonten" style="color:#5cb85c">Daftar Akun</h2>
+
+                    <!-- editText untuk memasukkan nama user baru -->
+                    <div class="table-thing widget uib_w_2 d-margins" data-uib="twitter%20bootstrap/input" data-ver="1">
+                        <label class="narrow-control" for="nkota"></label>
+                        <input class="wide-control form-control default input-lg" type="text" placeholder="Username Anda" id="newuser">
+                    </div>
+
+                    <!-- editText untuk memasukkan password baru -->
+                    <div class="table-thing widget uib_w_2 d-margins" data-uib="twitter%20bootstrap/input" data-ver="1">
+                        <label class="narrow-control" for="nkota"></label>
+                        <input class="wide-control form-control default input-lg" type="text" placeholder="Password Anda" id="newpass">
+                    </div>
+
+                    <!-- tombol login -->
+                    <button class="btn widget uib_w_4 d-margins btn-lg btn-success" data-uib="twitter%20bootstrap/button" data-ver="1" id="btNewUser" onclick="newUser()">DAFTAR</button>
+
+                    <!-- tombol ke form login lagi -->
+                    <p id="ketlogindandaftar">Sudah Punya Akun ?
+                        <br>Klik Tombol Dibawah Ini
+                        <br>Untuk Login</p>
+                    <button class="btn widget uib_w_7 d-margins btn-lg btn-link" data-uib="twitter%20bootstrap/button" data-ver="1" id="btKembaliKeLogin" onclick="kembalikelogin()">Login</button>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>
